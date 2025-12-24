@@ -1,0 +1,232 @@
+You are an expert Python engineer. Create a minimal, runnable project skeleton
+for an AI-driven trading bot. This is scaffolding only — DO NOT implement real
+trading or API calls.
+
+The project must:
+- Run cleanly in Replit
+- Be safe to push to GitHub
+- Be easy to extend later with Codex
+- Use CSV logging + Streamlit visualization
+- Prepare for MCP + OpenAI Agents SDK later
+
+--------------------------------------------------
+PROJECT GOAL (SKELETON ONLY)
+--------------------------------------------------
+
+Build the bones of a trading system that will later use:
+- OpenAI Agents SDK (decision making)
+- Alpaca via MCP (execution — later)
+- Streamlit (visual dashboard)
+
+For now:
+- The bot runs
+- Logs decisions to CSV
+- Dashboard displays logs
+- All trading logic is stubbed
+
+--------------------------------------------------
+REQUIRED PROJECT STRUCTURE (CREATE EXACTLY)
+--------------------------------------------------
+
+zeke-trader/
+  README.md
+  requirements.txt
+  .env.example
+
+  src/
+    __init__.py
+    main.py
+    config.py
+    schemas.py
+    agent_runner.py
+    risk.py
+    broker_mcp.py
+    logger.py
+
+  dashboard/
+    app.py
+
+  logs/
+    decisions.csv   # auto-create if missing
+
+--------------------------------------------------
+requirements.txt
+--------------------------------------------------
+
+Include:
+- streamlit
+- pandas
+- python-dotenv
+- pydantic
+
+Add a TODO comment noting that OpenAI Agents SDK will be added later.
+
+--------------------------------------------------
+.env.example (PLACEHOLDERS ONLY — NO SECRETS)
+--------------------------------------------------
+
+OPENAI_API_KEY=
+
+ALPACA_KEY_ID=
+ALPACA_SECRET_KEY=
+
+TRADING_MODE=paper
+LIVE_TRADING_ENABLED=false
+
+ALLOWED_SYMBOLS=NVDA,SPY,META,GOOGL,AVGO,BRK.A,GOOG,BRK.B,AMZN
+
+MAX_DOLLARS_PER_TRADE=25
+MAX_OPEN_POSITIONS=3
+MAX_TRADES_PER_DAY=5
+MAX_DAILY_LOSS=25
+
+LOOP_SECONDS=60
+LOG_DIR=logs
+
+--------------------------------------------------
+README.md
+--------------------------------------------------
+
+Explain:
+- What the project is
+- How to run the bot:
+  python -m src.main
+- How to run the dashboard:
+  streamlit run dashboard/app.py --server.port 8501 --server.address 0.0.0.0
+- Where to set secrets in Replit
+- Warning: never commit or screenshot API keys
+- Explain paper / shadow / live modes
+  (live requires LIVE_TRADING_ENABLED=true)
+
+--------------------------------------------------
+src/config.py
+--------------------------------------------------
+
+- Load environment variables (use python-dotenv)
+- Parse:
+  - allowlist symbols into a list
+  - numeric risk limits
+  - trading mode
+- Create a Config dataclass or Pydantic model
+- If TRADING_MODE=live AND LIVE_TRADING_ENABLED != true,
+  raise a clear error
+
+--------------------------------------------------
+src/schemas.py
+--------------------------------------------------
+
+Use pydantic to define:
+
+TradeIntent:
+- action = "TRADE"
+- symbol (uppercase)
+- side ("buy" | "sell")
+- notional_usd (float > 0)
+- confidence (0–1)
+- reason (string)
+
+NoTrade:
+- action = "NO_TRADE"
+- reason (string)
+
+Create:
+Decision = TradeIntent | NoTrade
+
+--------------------------------------------------
+src/agent_runner.py (STUB ONLY)
+--------------------------------------------------
+
+Create:
+def get_decision(market_snapshot: dict, cfg: Config) -> Decision
+
+For now, always return:
+{ "action": "NO_TRADE", "reason": "Skeleton running" }
+
+Leave TODO comments for:
+- OpenAI Agents SDK
+- MCP tools
+
+--------------------------------------------------
+src/risk.py
+--------------------------------------------------
+
+Create:
+def risk_check(decision: Decision, cfg: Config) -> tuple[bool, str]
+
+Rules:
+- NO_TRADE → always allowed
+- TRADE → block if:
+  - symbol not in allowlist
+  - notional_usd > MAX_DOLLARS_PER_TRADE
+
+Return (allowed, notes)
+
+--------------------------------------------------
+src/broker_mcp.py (STUB ONLY)
+--------------------------------------------------
+
+Create class AlpacaMCPBroker with methods:
+- get_account()
+- get_positions()
+- place_order_notional(...)
+
+Each method must raise NotImplementedError with TODO comments.
+
+--------------------------------------------------
+src/logger.py
+--------------------------------------------------
+
+- Ensure logs/ exists
+- Append to logs/decisions.csv
+- Create header if missing
+- Function:
+  log_decision(ts, mode, symbol, action, confidence,
+               reason, risk_allowed, risk_notes)
+
+--------------------------------------------------
+src/main.py
+--------------------------------------------------
+
+- Load config
+- Print startup banner
+- Create simple market snapshot (timestamp + allowlist)
+- Call:
+  - get_decision
+  - risk_check
+  - log_decision
+- Sleep LOOP_SECONDS
+- Loop forever
+
+NO trading
+NO MCP calls
+NO API calls
+
+--------------------------------------------------
+dashboard/app.py
+--------------------------------------------------
+
+Streamlit app that:
+- Shows title
+- Loads logs/decisions.csv
+- Displays last 50 rows
+- Auto-refreshes every ~2 seconds
+
+--------------------------------------------------
+FINAL OUTPUT
+--------------------------------------------------
+
+After creating everything:
+1) Print the full file tree
+2) Print run commands:
+
+python -m src.main
+streamlit run dashboard/app.py --server.port 8501 --server.address 0.0.0.0
+
+--------------------------------------------------
+HARD CONSTRAINTS
+--------------------------------------------------
+
+- NO real trading
+- NO API calls
+- NO secrets
+- Skeleton only
