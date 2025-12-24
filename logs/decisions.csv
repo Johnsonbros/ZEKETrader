@@ -1,0 +1,2 @@
+timestamp,mode,symbol,action,confidence,reason,risk_allowed,risk_notes
+2025-12-24T04:18:15.488172,paper,,NO_TRADE,,Skeleton running,True,NO_TRADE decisions are always allowed
