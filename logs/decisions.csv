@@ -1,3 +1,9 @@
 timestamp,mode,symbol,action,confidence,reason,risk_allowed,risk_notes
 2025-12-24T04:18:15.488172,paper,,NO_TRADE,,Skeleton running,True,NO_TRADE decisions are always allowed
 2025-12-24T04:19:15.488590,paper,,NO_TRADE,,Skeleton running,True,NO_TRADE decisions are always allowed
+2025-12-24T04:20:15.489480,paper,,NO_TRADE,,Skeleton running,True,NO_TRADE decisions are always allowed
+2025-12-24T04:21:15.489970,paper,,NO_TRADE,,Skeleton running,True,NO_TRADE decisions are always allowed
+2025-12-24T04:22:15.490417,paper,,NO_TRADE,,Skeleton running,True,NO_TRADE decisions are always allowed
+2025-12-24T04:23:15.490893,paper,,NO_TRADE,,Skeleton running,True,NO_TRADE decisions are always allowed
+2025-12-24T04:24:15.491360,paper,,NO_TRADE,,Skeleton running,True,NO_TRADE decisions are always allowed
+2025-12-24T04:25:15.491777,paper,,NO_TRADE,,Skeleton running,True,NO_TRADE decisions are always allowed
